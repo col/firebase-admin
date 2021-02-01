@@ -1,4 +1,4 @@
-# Firebase-Auth
+# Firebase Auth
 
 A ruby wrapper for the Firebase Auth APIs.
 
