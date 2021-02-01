@@ -5,6 +5,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rspec', '~> 3.10')
   s.add_development_dependency('rubocop', '~> 1.9')
   s.add_development_dependency('webmock', '~> 3.11')
+  s.add_runtime_dependency('addressable', '~> 2.7')
   s.add_runtime_dependency('faraday', '~> 1.3')
   s.add_runtime_dependency('faraday_middleware', '~> 1.0')
   s.add_runtime_dependency('hashie',  '~> 4.1')
