@@ -1,0 +1,13 @@
+{
+  "error": {
+    "code": 400,
+    "message": "INVALID_PHONE_NUMBER : Invalid format.",
+    "errors": [
+      {
+        "message": "INVALID_PHONE_NUMBER : Invalid format.",
+        "reason": "invalid",
+        "domain": "global"
+      }
+    ]
+  }
+}

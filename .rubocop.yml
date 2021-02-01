@@ -1,0 +1,13 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Exclude:
+  <% `git status --ignored --porcelain`.lines.grep(/^!! /).each do |path| %>
+    - <%= path.sub(/^!! /, '') %>
+  <% end %>
+    - spec/spec_helper.rb
+  TargetRubyVersion: 2.7
+  NewCops: enable
+
+Naming/VariableNumber:
+  EnforcedStyle: snake_case

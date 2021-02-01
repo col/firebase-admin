@@ -1,0 +1,6 @@
+{
+  "kind": "identitytoolkit#SignupNewUserResponse",
+  "localId": "abcdefghijklmnopqrstuvwxyzab",
+  "displayName": "John Smith",
+  "email": "john@smith.com"
+}
