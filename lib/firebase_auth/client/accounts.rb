@@ -106,7 +106,7 @@ module FirebaseAuth
       # @see https://firebase.google.com/docs/reference/rest/auth
       #
       # @example
-      #   FirebaseAuth.create_custom_token('qwerasdfzxcvertysdfg')
+      #   FirebaseAuth.create_custom_token('...')
       def create_custom_token(uid)
         credentials = JSON.parse(File.read(ENV['GOOGLE_ACCOUNT_CREDENTIALS']))
 
@@ -123,6 +123,22 @@ module FirebaseAuth
           uid: uid
         }
         JWT.encode(payload, private_key, 'RS256')
+      end
+
+      # Get user by email/phone/uid
+      #
+      # @param key [String] either :email or :phone
+      # @param value [String] the value to search for
+      #
+      # @return [Resource]
+      #
+      # @example
+      #   FirebaseAuth.get_user_by(:email, "lebron@lakers.com")
+      def get_user_by(key, value)
+        params = {}
+        params[key] = Array(value)
+        response = post('v1/accounts:lookup', params)
+        (response[:users] || []).first
       end
 
       # Reset emulator
