@@ -77,7 +77,7 @@ module FirebaseAuth
       #     email: "lebron@lakers.com",
       #     password: "super-secret"
       # )
-      def sign_in(params)
+      def sign_in_with_password(params)
         post('v1/accounts:signInWithPassword', params)
       end
 
