@@ -83,19 +83,14 @@ module FirebaseAuth
 
       # Sign in with custom token
       #
-      # @param params [Hash] A customizable set of params
-      # @option options [String] :token
-      # @option options [Boolean] :returnSecureToken
+      # @param token [String] A custom token
       #
       # @return [Resource] with idToken
       #
       # @example
-      #   FirebaseAuth.sign_in_with_custom_token(
-      #     token: "...",
-      #     returnSecureToken: true
-      # )
-      def sign_in_with_custom_token(params)
-        post('v1/accounts:signInWithCustomToken', params)
+      #   FirebaseAuth.sign_in_with_custom_token("...")
+      def sign_in_with_custom_token(token)
+        post('v1/accounts:signInWithCustomToken', { token: token, returnSecureToken: true })
       end
 
       # Create a custom JWT token for a UID
