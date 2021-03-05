@@ -1,3 +1,5 @@
+require 'jwt'
+
 module FirebaseAuth
   class Client
     # Defines methods related to accounts
@@ -77,6 +79,50 @@ module FirebaseAuth
       # )
       def sign_in(params)
         post('v1/accounts:signInWithPassword', params)
+      end
+
+      # Sign in with custom token
+      #
+      # @param params [Hash] A customizable set of params
+      # @option options [String] :token
+      # @option options [Boolean] :returnSecureToken
+      #
+      # @return [Resource] with idToken
+      #
+      # @example
+      #   FirebaseAuth.sign_in_with_custom_token(
+      #     token: "...",
+      #     returnSecureToken: true
+      # )
+      def sign_in_with_custom_token(params)
+        post('v1/accounts:signInWithCustomToken', params)
+      end
+
+      # Create a custom JWT token for a UID
+      #
+      # @param uid [String] The uid of a user
+      #
+      # @return [String]
+      # @see https://firebase.google.com/docs/reference/rest/auth
+      #
+      # @example
+      #   FirebaseAuth.create_custom_token('qwerasdfzxcvertysdfg')
+      def create_custom_token(uid)
+        credentials = JSON.parse(File.read(ENV['GOOGLE_ACCOUNT_CREDENTIALS']))
+
+        service_account_email = credentials['client_email']
+        private_key = OpenSSL::PKey::RSA.new credentials['private_key']
+
+        now_seconds = Time.now.to_i
+        payload = {
+          iss: service_account_email,
+          sub: service_account_email,
+          aud: 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit',
+          iat: now_seconds,
+          exp: now_seconds + (60 * 60), # Maximum expiration time is one hour
+          uid: uid
+        }
+        JWT.encode(payload, private_key, 'RS256')
       end
 
       # Reset emulator
