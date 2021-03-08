@@ -103,10 +103,10 @@ module FirebaseAuth
       # @example
       #   FirebaseAuth.create_custom_token('...')
       def create_custom_token(uid)
-        credentials = JSON.parse(File.read(ENV['GOOGLE_ACCOUNT_CREDENTIALS']))
+        credentials = default_credentials
 
-        service_account_email = credentials['client_email']
-        private_key = OpenSSL::PKey::RSA.new credentials['private_key']
+        service_account_email = credentials.fetch('client_email', ENV['GOOGLE_CLIENT_EMAIL'])
+        private_key = OpenSSL::PKey::RSA.new credentials.fetch('private_key', ENV['GOOGLE_PRIVATE_KEY'])
 
         now_seconds = Time.now.to_i
         payload = {
@@ -145,6 +145,14 @@ module FirebaseAuth
       #   FirebaseAuth.reset()
       def reset
         delete("emulator/v1/projects/#{project_id}/accounts")
+      end
+
+      private
+
+      def default_credentials
+        return {} if ENV['GOOGLE_APPLICATION_CREDENTIALS'].nil?
+
+        JSON.parse(File.read(ENV['GOOGLE_APPLICATION_CREDENTIALS']))
       end
     end
   end
