@@ -1,3 +1,3 @@
 module FirebaseAuth
-  VERSION = '0.0.5'.freeze unless defined?(::FirebaseAuth::VERSION)
+  VERSION = '0.0.6'.freeze unless defined?(::FirebaseAuth::VERSION)
 end

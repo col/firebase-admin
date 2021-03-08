@@ -105,7 +105,7 @@ describe FirebaseAuth::API do
           @client.create_account({})
         end
 
-        expect(output).to include 'INFO -- : Started POST request to: http://identitytoolkit.googleapis.com/v1/projects/test-project/accounts'
+        expect(output).to include 'INFO -- : Started POST request to: '
         expect(output).to include 'DEBUG -- : Response Headers:'
         expect(output).to include "User-Agent    : Firebase Auth Ruby Gem #{FirebaseAuth::VERSION}"
       end
@@ -124,7 +124,7 @@ describe FirebaseAuth::API do
           nil
         end
 
-        expect(output).to include 'INFO -- : Started POST request to: http://identitytoolkit.googleapis.com/v1/projects/test-project/accounts'
+        expect(output).to include 'INFO -- : Started POST request to: '
         expect(output).to include 'DEBUG -- : Response Headers:'
         expect(output).to include "User-Agent    : Firebase Auth Ruby Gem #{FirebaseAuth::VERSION}"
         expect(output).to include '{"error":{"message": "Bad words are bad."}}'
