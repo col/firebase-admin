@@ -1,4 +1,4 @@
-module FirebaseAuth
+module FirebaseAdmin
   # Custom error class for rescuing from all Firebase errors
   class Error < StandardError; end
 

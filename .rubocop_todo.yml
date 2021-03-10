@@ -37,9 +37,9 @@ Style/Documentation:
   Exclude:
     - 'spec/**/*'
     - 'test/**/*'
-    - 'lib/firebase_auth.rb'
-    - 'lib/firebase_auth/response.rb'
-    - 'lib/firebase_auth/version.rb'
+    - 'lib/firebase-admin.rb'
+    - 'lib/firebase-admin/response.rb'
+    - 'lib/firebase-admin/version.rb'
 
 # Offense count: 18
 # Cop supports --auto-correct.

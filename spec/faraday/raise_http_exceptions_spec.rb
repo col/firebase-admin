@@ -4,15 +4,15 @@ require File.expand_path('../spec_helper', __dir__)
 
 describe Faraday::Response do
   before do
-    @client = FirebaseAuth::Client.new(project_id: 'test-project')
+    @client = FirebaseAdmin::Client.new(project_id: 'test-project')
   end
 
   {
-    400 => FirebaseAuth::BadRequest,
-    404 => FirebaseAuth::NotFound,
-    429 => FirebaseAuth::TooManyRequests,
-    500 => FirebaseAuth::InternalServerError,
-    503 => FirebaseAuth::ServiceUnavailable
+    400 => FirebaseAdmin::BadRequest,
+    404 => FirebaseAdmin::NotFound,
+    429 => FirebaseAdmin::TooManyRequests,
+    500 => FirebaseAdmin::InternalServerError,
+    503 => FirebaseAdmin::ServiceUnavailable
   }.each do |status, exception|
     context "when HTTP status is #{status}" do
       before do
@@ -37,7 +37,7 @@ describe Faraday::Response do
     it 'should return the body error message' do
       expect do
         @client.create_account({})
-      end.to raise_error(FirebaseAuth::BadRequest, /INVALID_PHONE_NUMBER : Invalid format\./)
+      end.to raise_error(FirebaseAdmin::BadRequest, /INVALID_PHONE_NUMBER : Invalid format\./)
     end
   end
 
@@ -49,10 +49,10 @@ describe Faraday::Response do
       )
     end
 
-    it 'should raise an FirebaseAuth::BadGateway' do
+    it 'should raise an FirebaseAdmin::BadGateway' do
       expect do
         @client.create_account({})
-      end.to raise_error(FirebaseAuth::BadGateway)
+      end.to raise_error(FirebaseAdmin::BadGateway)
     end
   end
 
@@ -64,10 +64,10 @@ describe Faraday::Response do
       )
     end
 
-    it 'should raise an FirebaseAuth::GatewayTimeout' do
+    it 'should raise an FirebaseAdmin::GatewayTimeout' do
       expect do
         @client.create_account({})
-      end.to raise_error(FirebaseAuth::GatewayTimeout)
+      end.to raise_error(FirebaseAdmin::GatewayTimeout)
     end
   end
 end

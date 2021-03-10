@@ -1,7 +1,7 @@
 require File.expand_path('connection', __dir__)
 require File.expand_path('request', __dir__)
 
-module FirebaseAuth
+module FirebaseAdmin
   # @private
   class API
     # @private
@@ -9,7 +9,7 @@ module FirebaseAuth
 
     # Creates a new API
     def initialize(options = {})
-      options = FirebaseAuth.options.merge(options)
+      options = FirebaseAdmin.options.merge(options)
       Configuration::VALID_OPTIONS_KEYS.each do |key|
         send("#{key}=", options[key])
       end

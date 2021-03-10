@@ -1,7 +1,7 @@
 require 'addressable/uri'
 require 'json'
 
-module FirebaseAuth
+module FirebaseAdmin
   # Defines HTTP request methods
   module Request
     # Perform an HTTP GET request
@@ -38,7 +38,7 @@ module FirebaseAuth
           request.url(Addressable::URI.escape(path), options)
         end
       end
-      Response.create(response.body)
+      response.body
     end
   end
 end

@@ -8,25 +8,25 @@ module FaradayMiddleware
       @app.call(env).on_complete do |response|
         case response[:status].to_i
         when 400
-          raise FirebaseAuth::BadRequest,
+          raise FirebaseAdmin::BadRequest,
                 error_message_400(response)
         when 404
-          raise FirebaseAuth::NotFound,
+          raise FirebaseAdmin::NotFound,
                 error_message_400(response)
         when 429
-          raise FirebaseAuth::TooManyRequests,
+          raise FirebaseAdmin::TooManyRequests,
                 error_message_400(response)
         when 500
-          raise FirebaseAuth::InternalServerError,
+          raise FirebaseAdmin::InternalServerError,
                 error_message_500(response, 'Something is technically wrong.')
         when 502
-          raise FirebaseAuth::BadGateway,
+          raise FirebaseAdmin::BadGateway,
                 error_message_500(response, 'The server returned an invalid or incomplete response.')
         when 503
-          raise FirebaseAuth::ServiceUnavailable,
-                error_message_500(response, 'FirebaseAuth is rate limiting your requests.')
+          raise FirebaseAdmin::ServiceUnavailable,
+                error_message_500(response, 'Firebase is rate limiting your requests.')
         when 504
-          raise FirebaseAuth::GatewayTimeout,
+          raise FirebaseAdmin::GatewayTimeout,
                 error_message_500(response, '504 Gateway Time-out')
         end
       end

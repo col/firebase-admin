@@ -1,6 +1,6 @@
 require 'jwt'
 
-module FirebaseAuth
+module FirebaseAdmin
   class Client
     # Defines methods related to accounts
     module Accounts
@@ -19,7 +19,7 @@ module FirebaseAuth
       # @see https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
       #
       # @example
-      #   FirebaseAuth.create_account(
+      #   FirebaseAdmin.create_account(
       #     :email => "lebron@lakers.com",
       #     :password => "super-secret",
       #     :phoneNumber => "+5555555555",
@@ -48,7 +48,7 @@ module FirebaseAuth
       # @see https://firebase.google.com/docs/reference/rest/auth
       #
       # @example
-      #   FirebaseAuth.update_account(
+      #   FirebaseAdmin.update_account(
       #     email: "lebron@lakers.com",
       #     password: "super-secret",
       #     phoneNumber: "+5555555555",
@@ -73,7 +73,7 @@ module FirebaseAuth
       # @see https://firebase.google.com/docs/reference/rest/auth
       #
       # @example
-      #   FirebaseAuth.sign_in_with_password(
+      #   FirebaseAdmin.sign_in_with_password(
       #     email: "lebron@lakers.com",
       #     password: "super-secret"
       # )
@@ -88,7 +88,7 @@ module FirebaseAuth
       # @return [Resource] with idToken
       #
       # @example
-      #   FirebaseAuth.sign_in_with_custom_token("...")
+      #   FirebaseAdmin.sign_in_with_custom_token("...")
       def sign_in_with_custom_token(token)
         post('v1/accounts:signInWithCustomToken', { token: token, returnSecureToken: true })
       end
@@ -101,7 +101,7 @@ module FirebaseAuth
       # @see https://firebase.google.com/docs/reference/rest/auth
       #
       # @example
-      #   FirebaseAuth.create_custom_token('...')
+      #   FirebaseAdmin.create_custom_token('...')
       def create_custom_token(uid)
         credentials = default_credentials
 
@@ -128,7 +128,7 @@ module FirebaseAuth
       # @return [Resource]
       #
       # @example
-      #   FirebaseAuth.get_user_by(:email, "lebron@lakers.com")
+      #   FirebaseAdmin.get_user_by(:email, "lebron@lakers.com")
       def get_user_by(key, value)
         params = {}
         params[key] = Array(value)
@@ -142,7 +142,7 @@ module FirebaseAuth
       # @see https://firebase.google.com/docs/reference/rest/auth
       #
       # @example
-      #   FirebaseAuth.reset()
+      #   FirebaseAdmin.reset()
       def reset
         delete("emulator/v1/projects/#{project_id}/accounts")
       end

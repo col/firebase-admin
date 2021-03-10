@@ -1,13 +1,13 @@
 require File.expand_path('../spec_helper', __dir__)
 
-describe FirebaseAuth::API do
+describe FirebaseAdmin::API do
   before do
-    @keys = FirebaseAuth::Configuration::VALID_OPTIONS_KEYS
+    @keys = FirebaseAdmin::Configuration::VALID_OPTIONS_KEYS
   end
 
   context 'with module configuration' do
     before do
-      FirebaseAuth.configure do |config|
+      FirebaseAdmin.configure do |config|
         @keys.each do |key|
           config.send("#{key}=", key)
         end
@@ -15,11 +15,11 @@ describe FirebaseAuth::API do
     end
 
     after do
-      FirebaseAuth.reset
+      FirebaseAdmin.reset
     end
 
     it 'should inherit module configuration' do
-      api = FirebaseAuth::API.new
+      api = FirebaseAdmin::API.new
       @keys.each do |key|
         expect(api.send(key)).to eq(key)
       end
@@ -40,15 +40,15 @@ describe FirebaseAuth::API do
 
       context 'during initialization' do
         it 'should override module configuration' do
-          api = FirebaseAuth::API.new(@configuration)
+          api = FirebaseAdmin::API.new(@configuration)
           @keys.each do |key|
             expect(api.send(key)).to eq(@configuration[key])
           end
         end
       end
 
-      context 'after initilization' do
-        let(:api) { FirebaseAuth::API.new }
+      context 'after initialization' do
+        let(:api) { FirebaseAdmin::API.new }
 
         before do
           @configuration.each do |key, value|
@@ -73,7 +73,7 @@ describe FirebaseAuth::API do
   end
 
   describe '#config' do
-    subject { FirebaseAuth::API.new }
+    subject { FirebaseAdmin::API.new }
 
     let(:config) do
       c = {}
@@ -91,7 +91,7 @@ describe FirebaseAuth::API do
 
   describe 'loud_logger param' do
     before do
-      @client = FirebaseAuth::Client.new(project_id: 'test-project', loud_logger: true)
+      @client = FirebaseAdmin::Client.new(project_id: 'test-project', loud_logger: true)
     end
 
     context 'outputs to STDOUT with faraday logs when enabled' do
@@ -107,7 +107,7 @@ describe FirebaseAuth::API do
 
         expect(output).to include 'INFO -- : Started POST request to: '
         expect(output).to include 'DEBUG -- : Response Headers:'
-        expect(output).to include "User-Agent    : Firebase Auth Ruby Gem #{FirebaseAuth::VERSION}"
+        expect(output).to include "User-Agent    : Firebase Admin Ruby Gem #{FirebaseAdmin::VERSION}"
       end
     end
 
@@ -126,7 +126,7 @@ describe FirebaseAuth::API do
 
         expect(output).to include 'INFO -- : Started POST request to: '
         expect(output).to include 'DEBUG -- : Response Headers:'
-        expect(output).to include "User-Agent    : Firebase Auth Ruby Gem #{FirebaseAuth::VERSION}"
+        expect(output).to include "User-Agent    : Firebase Admin Ruby Gem #{FirebaseAdmin::VERSION}"
         expect(output).to include '{"error":{"message": "Bad words are bad."}}'
       end
     end

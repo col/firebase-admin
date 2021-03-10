@@ -4,13 +4,13 @@ rescue LoadError
   # ignore
 else
   SimpleCov.start do
-    add_group 'FirebaseAuth', 'lib/firebase_auth'
+    add_group 'FirebaseAdmin', 'lib/firebase-admin'
     add_group 'Faraday Middleware', 'lib/faraday'
     add_group 'Specs', 'spec'
   end
 end
 
-require File.expand_path('../lib/firebase_auth', __dir__)
+require File.expand_path('../lib/firebase-admin', __dir__)
 
 require 'rspec'
 require 'webmock/rspec'
@@ -32,35 +32,35 @@ def capture_output(&block)
 end
 
 def a_delete(path)
-  a_request(:delete, FirebaseAuth.endpoint + path)
+  a_request(:delete, FirebaseAdmin.endpoint + path)
 end
 
 def a_get(path)
-  a_request(:get, FirebaseAuth.endpoint + path)
+  a_request(:get, FirebaseAdmin.endpoint + path)
 end
 
 def a_post(path)
-  a_request(:post, FirebaseAuth.endpoint + path)
+  a_request(:post, FirebaseAdmin.endpoint + path)
 end
 
 def a_put(path)
-  a_request(:put, FirebaseAuth.endpoint + path)
+  a_request(:put, FirebaseAdmin.endpoint + path)
 end
 
 def stub_delete(path)
-  stub_request(:delete, FirebaseAuth.endpoint + path)
+  stub_request(:delete, FirebaseAdmin.endpoint + path)
 end
 
 def stub_get(path)
-  stub_request(:get, FirebaseAuth.endpoint + path)
+  stub_request(:get, FirebaseAdmin.endpoint + path)
 end
 
 def stub_post(path)
-  stub_request(:post, FirebaseAuth.endpoint + path)
+  stub_request(:post, FirebaseAdmin.endpoint + path)
 end
 
 def stub_put(path)
-  stub_request(:put, FirebaseAuth.endpoint + path)
+  stub_request(:put, FirebaseAdmin.endpoint + path)
 end
 
 def fixture_path

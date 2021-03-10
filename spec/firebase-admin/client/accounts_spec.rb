@@ -1,8 +1,8 @@
 require File.expand_path('../../spec_helper', __dir__)
 
-describe FirebaseAuth::Client do
+describe FirebaseAdmin::Client do
   before do
-    @client = FirebaseAuth::Client.new(project_id: 'test-project')
+    @client = FirebaseAdmin::Client.new(project_id: 'test-project')
   end
 
   describe '.create_account' do

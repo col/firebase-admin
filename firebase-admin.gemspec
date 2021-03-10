@@ -1,4 +1,4 @@
-require File.expand_path('lib/firebase_auth/version', __dir__)
+require File.expand_path('lib/firebase-admin/version', __dir__)
 
 Gem::Specification.new do |s|
   s.add_development_dependency('rake', '~> 13.0')
@@ -12,15 +12,15 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('multi_json', '~> 1.15')
   s.add_runtime_dependency('jwt', '~> 2.2.2')
   s.authors = ['Colin Harris']
-  s.description = 'A Ruby wrapper for the Firebase Auth APIs'
+  s.description = 'A Ruby wrapper for the Firebase Admin APIs'
   s.email = ['colin@jiva.ag']
   s.files = `git ls-files`.split("\n")
-  s.homepage = 'https://github.com/col/firebase_auth'
+  s.homepage = 'https://github.com/col/firebase-admin'
   s.name = 'firebase_auth'
   s.platform = Gem::Platform::RUBY
   s.require_paths = ['lib']
   s.required_ruby_version = '> 2.7'
-  s.summary = 'Ruby wrapper for the Firebase Auth APIs'
+  s.summary = 'Ruby wrapper for the Firebase Admin APIs'
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.version = FirebaseAuth::VERSION.dup
+  s.version = FirebaseAdmin::VERSION.dup
 end

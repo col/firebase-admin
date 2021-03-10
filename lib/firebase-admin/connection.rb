@@ -1,7 +1,7 @@
 require 'faraday_middleware'
 Dir[File.expand_path('../faraday/*.rb', __dir__)].sort.each { |f| require f }
 
-module FirebaseAuth
+module FirebaseAdmin
   # @private
   module Connection
     private

@@ -1,10 +1,10 @@
 require 'faraday'
 require File.expand_path('version', __dir__)
 
-module FirebaseAuth
+module FirebaseAdmin
   # Defines constants and methods related to configuration
   module Configuration
-    # An array of valid keys in the options hash when configuring a {FirebaseAuth::API}
+    # An array of valid keys in the options hash when configuring a {FirebaseAdmin::API}
     VALID_OPTIONS_KEYS = %i[
       access_token
       adapter
@@ -37,9 +37,8 @@ module FirebaseAuth
     DEFAULT_FORMAT = :json
 
     # The user agent that will be sent to the API endpoint if none is set
-    DEFAULT_USER_AGENT = "Firebase Auth Ruby Gem #{FirebaseAuth::VERSION}".freeze
+    DEFAULT_USER_AGENT = "Firebase Admin Ruby Gem #{FirebaseAdmin::VERSION}".freeze
 
-    # TODO: ...
     DEFAULT_PROJECT_ID = ''.freeze
 
     # By default, don't turn on loud logging
