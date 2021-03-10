@@ -1,3 +1,3 @@
 module FirebaseAdmin
-  VERSION = '0.0.6'.freeze unless defined?(::FirebaseAdmin::VERSION)
+  VERSION = '0.1.0'.freeze unless defined?(::FirebaseAdmin::VERSION)
 end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    firebase_auth (0.0.6)
+    firebase_auth (0.1.0)
       addressable (~> 2.7)
       faraday (~> 1.3)
       faraday_middleware (~> 1.0)
