@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.files = `git ls-files`.split("\n")
   s.homepage = 'https://github.com/col/firebase-admin'
   s.license = 'MIT'
-  s.name = 'firebase_auth'
+  s.name = 'firebase-admin'
   s.platform = Gem::Platform::RUBY
   s.require_paths = ['lib']
   s.required_ruby_version = '> 2.7'
