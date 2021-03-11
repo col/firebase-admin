@@ -106,7 +106,7 @@ module FirebaseAdmin
         credentials = default_credentials
 
         service_account_email = credentials.fetch('client_email', ENV['GOOGLE_CLIENT_EMAIL'])
-        private_key = OpenSSL::PKey::RSA.new credentials.fetch('private_key', ENV['GOOGLE_PRIVATE_KEY'])
+        private_key = OpenSSL::PKey::RSA.new credentials.fetch('private_key', unescape(ENV['GOOGLE_PRIVATE_KEY']))
 
         now_seconds = Time.now.to_i
         payload = {
@@ -148,6 +148,12 @@ module FirebaseAdmin
       end
 
       private
+
+      def unescape(str)
+        str = str.gsub '\n', "\n"
+        str = str[1..-2] if str.start_with?('"') && str.end_with?('"')
+        str
+      end
 
       def default_credentials
         return {} if ENV['GOOGLE_APPLICATION_CREDENTIALS'].nil?
