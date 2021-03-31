@@ -93,6 +93,20 @@ module FirebaseAdmin
         post('v1/accounts:signInWithCustomToken', { token: token, returnSecureToken: true })
       end
 
+      # Sign in based on the UID of an account
+      # This generates a custom token for the UID and signs in using the custom token
+      #
+      # @param uid [String] The uid of a user
+      #
+      # @return [Resource] with idToken
+      #
+      # @example
+      #   FirebaseAdmin.sign_in_for_uid("...")
+      def sign_in_for_uid(uid)
+        custom_token = create_custom_token(uid)
+        sign_in_with_custom_token(custom_token)
+      end
+
       # Create a custom JWT token for a UID
       #
       # @param uid [String] The uid of a user
