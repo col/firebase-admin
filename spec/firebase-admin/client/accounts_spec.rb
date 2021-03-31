@@ -37,6 +37,36 @@ describe FirebaseAdmin::Client do
     end
   end
 
+  describe '.create_custom_token' do
+    context 'when credentials are set via GOOGLE_APPLICATION_CREDENTIALS' do
+      before do
+        ENV['GOOGLE_APPLICATION_CREDENTIALS'] = fixture('google_credentials.json').path
+      end
+
+      it 'returns a valid JWT token' do
+        token = @client.create_custom_token('user-123')
+        token_data, _alg = JWT.decode(token, nil, false)
+        expect(token_data['uid']).to eq('user-123')
+      end
+    end
+
+    context 'when credentials are set via GOOGLE_CLIENT_EMAIL / GOOGLE_PRIVATE_KEY' do
+      let(:email) { 'example@example.com' }
+      let(:private_key) { fixture('example_key').read }
+
+      before do
+        ENV['GOOGLE_CLIENT_EMAIL'] = email
+        ENV['GOOGLE_PRIVATE_KEY'] = private_key
+      end
+
+      it 'returns a valid JWT token' do
+        token = @client.create_custom_token('user-123')
+        token_data, _alg = JWT.decode(token, nil, false)
+        expect(token_data['uid']).to eq('user-123')
+      end
+    end
+  end
+
   describe '.sign_in_for_uid' do
     it 'should post to the  update endpoint' do
       expect(@client).to receive(:create_custom_token).with('user-123').and_return('token')

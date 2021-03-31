@@ -117,11 +117,6 @@ module FirebaseAdmin
       # @example
       #   FirebaseAdmin.create_custom_token('...')
       def create_custom_token(uid)
-        credentials = default_credentials
-
-        service_account_email = credentials.fetch('client_email', ENV['GOOGLE_CLIENT_EMAIL'])
-        private_key = OpenSSL::PKey::RSA.new credentials.fetch('private_key', unescape(ENV['GOOGLE_PRIVATE_KEY']))
-
         now_seconds = Time.now.to_i
         payload = {
           iss: service_account_email,
@@ -169,10 +164,20 @@ module FirebaseAdmin
         str
       end
 
-      def default_credentials
-        return {} if ENV['GOOGLE_APPLICATION_CREDENTIALS'].nil?
+      def service_account_email
+        default_credentials.fetch('client_email') { ENV['GOOGLE_CLIENT_EMAIL'] }
+      end
 
-        JSON.parse(File.read(ENV['GOOGLE_APPLICATION_CREDENTIALS']))
+      def private_key
+        key = default_credentials.fetch('private_key') { unescape(ENV['GOOGLE_PRIVATE_KEY']) }
+        OpenSSL::PKey::RSA.new(key)
+      end
+
+      def default_credentials
+        @default_credentials ||= begin
+          credentials_path = ENV['GOOGLE_APPLICATION_CREDENTIALS']
+          JSON.parse(File.read(credentials_path)) if credentials_path
+        end
       end
     end
   end
