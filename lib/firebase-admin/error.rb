@@ -25,4 +25,7 @@ module FirebaseAdmin
 
   # Raised when Firebase returns the HTTP status code 429
   class RateLimitExceeded < Error; end
+
+  # Raised when no valid credentials are found
+  class InvalidCredentials < Error; end
 end

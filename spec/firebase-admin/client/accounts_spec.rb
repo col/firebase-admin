@@ -50,11 +50,22 @@ describe FirebaseAdmin::Client do
       end
     end
 
+    context 'when GOOGLE_APPLICATION_CREDENTIALS points to an invalid file' do
+      before do
+        ENV['GOOGLE_APPLICATION_CREDENTIALS'] = fixture('google_credentials_invalid.json').path
+      end
+
+      it 'raises an error' do
+        expect { @client.create_custom_token('user-123') }.to raise_error FirebaseAdmin::InvalidCredentials
+      end
+    end
+
     context 'when credentials are set via GOOGLE_CLIENT_EMAIL / GOOGLE_PRIVATE_KEY' do
       let(:email) { 'example@example.com' }
       let(:private_key) { fixture('example_key').read }
 
       before do
+        ENV['GOOGLE_APPLICATION_CREDENTIALS'] = nil
         ENV['GOOGLE_CLIENT_EMAIL'] = email
         ENV['GOOGLE_PRIVATE_KEY'] = private_key
       end
@@ -63,6 +74,18 @@ describe FirebaseAdmin::Client do
         token = @client.create_custom_token('user-123')
         token_data, _alg = JWT.decode(token, nil, false)
         expect(token_data['uid']).to eq('user-123')
+      end
+    end
+
+    context 'when no credentials are provided' do
+      before do
+        ENV['GOOGLE_APPLICATION_CREDENTIALS'] = nil
+        ENV['GOOGLE_CLIENT_EMAIL'] = nil
+        ENV['GOOGLE_PRIVATE_KEY'] = nil
+      end
+
+      it 'raises an error' do
+        expect { @client.create_custom_token('user-123') }.to raise_error FirebaseAdmin::InvalidCredentials
       end
     end
   end

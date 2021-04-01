@@ -165,19 +165,39 @@ module FirebaseAdmin
       end
 
       def service_account_email
-        default_credentials.fetch('client_email') { ENV['GOOGLE_CLIENT_EMAIL'] }
+        email = default_credentials.fetch('client_email') { ENV['GOOGLE_CLIENT_EMAIL'] }
+        if email.nil? || email == ''
+          raise InvalidCredentials,
+                "No client email provided via 'GOOGLE_APPLICATION_CREDENTIALS' or 'GOOGLE_CLIENT_EMAIL'"
+        end
+
+        email
       end
 
       def private_key
         key = default_credentials.fetch('private_key') { unescape(ENV['GOOGLE_PRIVATE_KEY']) }
+        if key.nil? || key == ''
+          raise InvalidCredentials,
+                "No private key provided via 'GOOGLE_APPLICATION_CREDENTIALS' or 'GOOGLE_PRIVATE_KEY'"
+        end
+
         OpenSSL::PKey::RSA.new(key)
       end
 
       def default_credentials
-        @default_credentials ||= begin
-          credentials_path = ENV['GOOGLE_APPLICATION_CREDENTIALS']
-          JSON.parse(File.read(credentials_path)) if credentials_path
+        @default_credentials ||= read_default_credentials
+      end
+
+      def read_default_credentials
+        credentials_path = ENV['GOOGLE_APPLICATION_CREDENTIALS']
+        if credentials_path && File.exist?(credentials_path)
+          JSON.parse(File.read(credentials_path))
+        else
+          {}
         end
+      rescue StandardError => e
+        raise InvalidCredentials,
+              "Failed reading credentials from '#{ENV['GOOGLE_APPLICATION_CREDENTIALS']}'. Error: #{e.message}"
       end
     end
   end
