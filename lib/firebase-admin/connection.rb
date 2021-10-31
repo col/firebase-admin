@@ -17,7 +17,7 @@ module FirebaseAdmin
       }.merge(connection_options)
 
       Faraday::Connection.new(options) do |connection|
-        connection.authorization :Bearer, access_token if access_token
+        connection.request :authorization, 'Bearer', access_token if access_token
         connection.use Faraday::Request::UrlEncoded
         connection.use FaradayMiddleware::Mashify
         connection.use Faraday::Response::ParseJson
