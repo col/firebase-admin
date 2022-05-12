@@ -37,6 +37,22 @@ describe FirebaseAdmin::Client do
     end
   end
 
+  describe '.delete_account' do
+    before do
+      stub_post('v1/projects/test-project/accounts:delete')
+        .to_return(body: fixture('delete_account.json'), headers: { content_type: 'application/json; charset=utf-8' })
+    end
+
+    it 'should post to the  delete endpoint' do
+      @client.delete_account('local-id')
+      expect(
+        a_post('v1/projects/test-project/accounts:delete')
+          .with(body: { localId: 'local-id'}.to_json)
+          .with(headers: { 'Authorization' => 'Bearer owner' })
+      ).to have_been_made
+    end
+  end
+
   describe '.create_custom_token' do
     context 'when credentials are set via GOOGLE_APPLICATION_CREDENTIALS' do
       before do

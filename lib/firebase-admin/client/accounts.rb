@@ -63,6 +63,20 @@ module FirebaseAdmin
         post("v1/projects/#{project_id}/accounts:update", params)
       end
 
+      # DELETES the account completely from firebase. Once deleted we can retreive the account
+      # Need to be used cautiously
+      #
+      # @return 200 OK
+      # @see https://firebase.google.com/docs/reference/rest/auth
+      #
+      # @param localId [String] profile ID
+      def delete_account(localId)
+        params = {'localId': localId}
+        path = "v1/projects/#{project_id}/accounts:delete"
+        post path, params
+      end
+
+
       # Sign in with a password
       #
       # @param params [Hash] A customizable set of params
