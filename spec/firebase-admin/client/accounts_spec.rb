@@ -1,9 +1,7 @@
 require File.expand_path('../../spec_helper', __dir__)
 
 describe FirebaseAdmin::Client do
-  before do
-    @client = FirebaseAdmin::Client.new(project_id: 'test-project')
-  end
+  let(:client) { FirebaseAdmin::Client.new(project_id: 'test-project') }
 
   describe '.create_account' do
     before do
@@ -12,7 +10,7 @@ describe FirebaseAdmin::Client do
     end
 
     it 'should get the correct resource' do
-      @client.create_account(email: 'john@smith.com', password: 'supersecret')
+      client.create_account(email: 'john@smith.com', password: 'supersecret')
       expect(
         a_post('v1/projects/test-project/accounts')
           .with(body: { email: 'john@smith.com', password: 'supersecret' }.to_json)
@@ -28,7 +26,7 @@ describe FirebaseAdmin::Client do
     end
 
     it 'should post to the  update endpoint' do
-      @client.update_account(email: 'john@smith.com', password: 'supersecret')
+      client.update_account(email: 'john@smith.com', password: 'supersecret')
       expect(
         a_post('v1/projects/test-project/accounts:update')
           .with(body: { email: 'john@smith.com', password: 'supersecret' }.to_json)
@@ -41,10 +39,11 @@ describe FirebaseAdmin::Client do
     context 'when credentials are set via GOOGLE_APPLICATION_CREDENTIALS' do
       before do
         ENV['GOOGLE_APPLICATION_CREDENTIALS'] = fixture('google_credentials.json').path
+        FirebaseAdmin.reset
       end
 
       it 'returns a valid JWT token' do
-        token = @client.create_custom_token('user-123')
+        token = client.create_custom_token('user-123')
         token_data, _alg = JWT.decode(token, nil, false)
         expect(token_data['uid']).to eq('user-123')
       end
@@ -53,10 +52,13 @@ describe FirebaseAdmin::Client do
     context 'when GOOGLE_APPLICATION_CREDENTIALS points to an invalid file' do
       before do
         ENV['GOOGLE_APPLICATION_CREDENTIALS'] = fixture('google_credentials_invalid.json').path
+        FirebaseAdmin.reset
       end
 
       it 'raises an error' do
-        expect { @client.create_custom_token('user-123') }.to raise_error FirebaseAdmin::InvalidCredentials
+        expect {
+          client.create_custom_token('user-123')
+        }.to raise_error FirebaseAdmin::InvalidCredentials
       end
     end
 
@@ -68,10 +70,11 @@ describe FirebaseAdmin::Client do
         ENV['GOOGLE_APPLICATION_CREDENTIALS'] = nil
         ENV['GOOGLE_CLIENT_EMAIL'] = email
         ENV['GOOGLE_PRIVATE_KEY'] = private_key
+        FirebaseAdmin.reset
       end
 
       it 'returns a valid JWT token' do
-        token = @client.create_custom_token('user-123')
+        token = client.create_custom_token('user-123')
         token_data, _alg = JWT.decode(token, nil, false)
         expect(token_data['uid']).to eq('user-123')
       end
@@ -82,19 +85,22 @@ describe FirebaseAdmin::Client do
         ENV['GOOGLE_APPLICATION_CREDENTIALS'] = nil
         ENV['GOOGLE_CLIENT_EMAIL'] = nil
         ENV['GOOGLE_PRIVATE_KEY'] = nil
+        FirebaseAdmin.reset
       end
 
       it 'raises an error' do
-        expect { @client.create_custom_token('user-123') }.to raise_error FirebaseAdmin::InvalidCredentials
+        expect {
+          client.create_custom_token('user-123')
+        }.to raise_error FirebaseAdmin::InvalidCredentials
       end
     end
   end
 
   describe '.sign_in_for_uid' do
     it 'should post to the  update endpoint' do
-      expect(@client).to receive(:create_custom_token).with('user-123').and_return('token')
-      expect(@client).to receive(:sign_in_with_custom_token).with('token').and_return('result')
-      result = @client.sign_in_for_uid('user-123')
+      expect(client).to receive(:create_custom_token).with('user-123').and_return('token')
+      expect(client).to receive(:sign_in_with_custom_token).with('token').and_return('result')
+      result = client.sign_in_for_uid('user-123')
       expect(result).to eq('result')
     end
   end

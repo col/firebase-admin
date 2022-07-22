@@ -1,3 +1,6 @@
 firebase-admin.iml
 out
 coverage
+vendor/bundle
+.idea
+.run

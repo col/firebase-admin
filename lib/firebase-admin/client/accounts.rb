@@ -117,6 +117,16 @@ module FirebaseAdmin
       # @example
       #   FirebaseAdmin.create_custom_token('...')
       def create_custom_token(uid)
+        if service_account_email.nil? || service_account_email == ''
+          raise InvalidCredentials,
+                "No client email provided via options, 'GOOGLE_APPLICATION_CREDENTIALS' or 'GOOGLE_CLIENT_EMAIL'"
+        end
+
+        if service_account_private_key.nil? || service_account_private_key == ''
+          raise InvalidCredentials,
+                "No private key provided via options, 'GOOGLE_APPLICATION_CREDENTIALS' or 'GOOGLE_PRIVATE_KEY'"
+        end
+
         now_seconds = Time.now.to_i
         payload = {
           iss: service_account_email,
@@ -126,7 +136,7 @@ module FirebaseAdmin
           exp: now_seconds + (60 * 60), # Maximum expiration time is one hour
           uid: uid
         }
-        JWT.encode(payload, private_key, 'RS256')
+        JWT.encode(payload, OpenSSL::PKey::RSA.new(unescape(service_account_private_key)), 'RS256')
       end
 
       # Get user by email/phone/uid
@@ -162,42 +172,6 @@ module FirebaseAdmin
         str = str.gsub '\n', "\n"
         str = str[1..-2] if str.start_with?('"') && str.end_with?('"')
         str
-      end
-
-      def service_account_email
-        email = default_credentials.fetch('client_email') { ENV['GOOGLE_CLIENT_EMAIL'] }
-        if email.nil? || email == ''
-          raise InvalidCredentials,
-                "No client email provided via 'GOOGLE_APPLICATION_CREDENTIALS' or 'GOOGLE_CLIENT_EMAIL'"
-        end
-
-        email
-      end
-
-      def private_key
-        key = default_credentials.fetch('private_key') { unescape(ENV['GOOGLE_PRIVATE_KEY']) }
-        if key.nil? || key == ''
-          raise InvalidCredentials,
-                "No private key provided via 'GOOGLE_APPLICATION_CREDENTIALS' or 'GOOGLE_PRIVATE_KEY'"
-        end
-
-        OpenSSL::PKey::RSA.new(key)
-      end
-
-      def default_credentials
-        @default_credentials ||= read_default_credentials
-      end
-
-      def read_default_credentials
-        credentials_path = ENV['GOOGLE_APPLICATION_CREDENTIALS']
-        if credentials_path && File.exist?(credentials_path)
-          JSON.parse(File.read(credentials_path))
-        else
-          {}
-        end
-      rescue StandardError => e
-        raise InvalidCredentials,
-              "Failed reading credentials from '#{ENV['GOOGLE_APPLICATION_CREDENTIALS']}'. Error: #{e.message}"
       end
     end
   end

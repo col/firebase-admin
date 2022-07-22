@@ -34,7 +34,9 @@ describe FirebaseAdmin::API do
           endpoint: 'http://tumblr.com/',
           user_agent: 'Custom User Agent',
           project_id: 'test-project',
-          loud_logger: true
+          loud_logger: true,
+          service_account_email: 'example@gmail.com',
+          service_account_private_key: '===private key==='
         }
       end
 

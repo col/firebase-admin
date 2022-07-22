@@ -13,6 +13,8 @@ module FirebaseAdmin
       user_agent
       project_id
       loud_logger
+      service_account_email
+      service_account_private_key
     ].freeze
 
     # By default, don't set a user access token
@@ -47,6 +49,18 @@ module FirebaseAdmin
     # @private
     attr_accessor(*VALID_OPTIONS_KEYS)
 
+    def service_account_email
+      @service_account_email ||= service_account_credentials.fetch('client_email') do
+        ENV['GOOGLE_CLIENT_EMAIL']
+      end
+    end
+
+    def service_account_private_key
+      @service_account_private_key ||= service_account_credentials.fetch('private_key') do
+        ENV['GOOGLE_PRIVATE_KEY']
+      end
+    end
+
     # When this module is extended, set all configuration options to their default values
     def self.extended(base)
       base.reset
@@ -64,6 +78,23 @@ module FirebaseAdmin
       end
     end
 
+    def service_account_credentials
+      return {} unless ENV['GOOGLE_APPLICATION_CREDENTIALS']
+
+      @service_account_credentials ||= read_service_account_credentials(ENV['GOOGLE_APPLICATION_CREDENTIALS'])
+    end
+
+    def read_service_account_credentials(credentials_path)
+      if credentials_path && File.exist?(credentials_path)
+        JSON.parse(File.read(credentials_path))
+      else
+        {}
+      end
+    rescue StandardError => e
+      raise InvalidCredentials,
+            "Failed reading credentials from '#{ENV['GOOGLE_APPLICATION_CREDENTIALS']}'. Error: #{e.message}"
+    end
+
     # Reset all configuration options to defaults
     def reset
       self.access_token       = DEFAULT_ACCESS_TOKEN
@@ -73,6 +104,9 @@ module FirebaseAdmin
       self.user_agent         = DEFAULT_USER_AGENT
       self.project_id         = DEFAULT_PROJECT_ID
       self.loud_logger        = DEFAULT_LOUD_LOGGER
+      @service_account_credentials = nil
+      self.service_account_email = nil
+      self.service_account_private_key = nil
     end
   end
 end
