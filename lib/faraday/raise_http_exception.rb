@@ -1,7 +1,7 @@
 require 'faraday'
 
 # @private
-module FaradayMiddleware
+module Faraday
   # @private
   class RaiseHttpException < Faraday::Middleware
     def call(env)
@@ -58,4 +58,6 @@ module FaradayMiddleware
       "#{response[:method].to_s.upcase} #{response[:url]}: #{response[:status]}: #{body}"
     end
   end
+
+  Faraday::Middleware.register_middleware(raise_http_exception: Faraday::RaiseHttpException)
 end

@@ -1,7 +1,7 @@
-require 'faraday'
+require 'faraday/middleware'
 
 # @private
-module FaradayMiddleware
+module Faraday
   # @private
   class LoudLogger < Faraday::Middleware
     extend Forwardable
@@ -72,4 +72,6 @@ module FaradayMiddleware
       headers.map { |name, value| "#{name.to_s.ljust(length)} : #{filter(value)}" }.join("\n")
     end
   end
+
+  Faraday::Middleware.register_middleware(load_logger: Faraday::LoudLogger)
 end
