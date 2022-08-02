@@ -42,7 +42,7 @@ describe FirebaseAdmin::Client do
     end
 
     it 'should post to the  delete endpoint' do
-      @client.delete_account('local-id')
+      client.delete_account('local-id')
       expect(
         a_post('v1/projects/test-project/accounts:delete')
           .with(body: { localId: 'local-id'}.to_json)
